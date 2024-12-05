@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: hsl(245, 50%, 90%);
+  --color-secondary: hsl(245, 50%, 10%);
+  --color-tertiary: hsl(305, 80%, 20%);
+  --color-accent: hsl(185, 80%, 20%);
+}
+
+[data-theme="dark"] {
+  --color-primary: hsl(245, 50%, 10%);
+  --color-secondary: hsl(245, 50%, 90%);
+  --color-tertiary: hsl(305, 80%, 80%);
+  --color-accent: hsl(185, 80%, 80%);
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
