@@ -1,5 +1,6 @@
 "use server";
 import { createClient } from "@/utils/supabase/server";
+
 import { Database } from "@/database.types";
 type Team = Database["public"]["Tables"]["teams"]["Row"];
 
