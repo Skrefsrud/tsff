@@ -29,9 +29,9 @@ CREATE TABLE user_roles (
 
 CREATE TABLE seasons (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    year_label VARCHAR NOT NULL  -- e.g. '2024/2025'
-    start_date DATE NOT NULL
-    end_date DATE NOT NULL
+    year_label VARCHAR NOT NULL,  -- e.g. '2024/2025'
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
@@ -219,9 +219,8 @@ CREATE TABLE season_team_standings (
     points BIGINT NOT NULL,
     goals_scored BIGINT NOT NULL,
     goals_against BIGINT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
-    ADD CONSTRAINT unique_season_team_standings UNIQUE (season_team_id);
-
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT unique_season_team_standings UNIQUE (season_team_id)
 );
 
 
