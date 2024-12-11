@@ -1,9 +1,9 @@
-'use client'
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import ThemeToggle from './theme-toggle';
-import { useAuth } from '@/context/AuthContext';
-import { User } from 'lucide-react';
+"use client";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import ThemeToggle from "./theme-toggle";
+import { useAuth } from "@/context/AuthContext";
+import { User } from "lucide-react";
 
 export default function Header() {
   const { user, loading } = useAuth();
@@ -24,17 +24,26 @@ export default function Header() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/about" className="text-foreground hover:text-primary">
-                    About
+                  <Link
+                    href="/seriespill"
+                    className="text-foreground hover:text-primary"
+                  >
+                    Seriespill
                   </Link>
                 </li>
                 <li>
-                  <Link href="/services" className="text-foreground hover:text-primary">
+                  <Link
+                    href="/services"
+                    className="text-foreground hover:text-primary"
+                  >
                     Services
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-foreground hover:text-primary">
+                  <Link
+                    href="/contact"
+                    className="text-foreground hover:text-primary"
+                  >
                     Contact
                   </Link>
                 </li>
@@ -55,7 +64,7 @@ export default function Header() {
                 <Button>Sign In</Button>
               </Link>
             )}
-              
+
             <ThemeToggle />
           </div>
           <div className="md:hidden flex items-center space-x-2">
