@@ -1,6 +1,7 @@
 import { getTeams } from "@/actions/getTeams";
 import { useState, useEffect } from "react";
-import { Database } from "@/types/database.types";
+import { Database } from "@/database.types";
+
 
 // get teams type from Database
 type Team = Database["public"]["Tables"]["teams"]["Row"];

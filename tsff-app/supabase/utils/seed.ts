@@ -1,4 +1,6 @@
+
 import * as dotenv from "dotenv";
+
 import { createClient } from "@supabase/supabase-js";
 
 interface CreatedUser {
@@ -9,11 +11,13 @@ interface CreatedUser {
 }
 
 async function main() {
+
   dotenv.config();
   const supabaseUrl = process.env.SUPABASE_URL as string;
   const supabaseKey = process.env.SUPABASE_KEY as string;
 
   const supabaseAdmin = createClient(supabaseUrl, supabaseKey);
+
   // -----------------------------------------------------------
   // Configuration
   // -----------------------------------------------------------

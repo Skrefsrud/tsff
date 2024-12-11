@@ -1,4 +1,5 @@
-import { Database } from "@/types/database.types";
+import { Database } from "@/database.types";
+
 type Team = Database["public"]["Tables"]["teams"]["Row"];
 
 import { Card } from "../ui/card";
