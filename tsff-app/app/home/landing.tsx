@@ -3,6 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { getUserRoles } from "@/actions/getUserRoles";
 import { useState, useEffect } from "react";
 import { UserRole } from "@/types/types";
+import DisplayTeams from "@/components/team/display-teams";
 
 export default function Landing() {
   const { user, loading } = useAuth();
@@ -31,6 +32,7 @@ export default function Landing() {
       ) : (
         <p>Welcome, guest! Please log in to access more features.</p>
       )}
+      <DisplayTeams />
     </div>
   );
 }
