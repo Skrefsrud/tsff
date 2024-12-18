@@ -7,7 +7,7 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const { id: userId } = params;
+  const { id: userId } = await params;
 
   try {
     const cookieStore = await cookies();

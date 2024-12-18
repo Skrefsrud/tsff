@@ -2,6 +2,7 @@ import AdminLayout from "./components/admin-layout";
 import { getServerSession } from "@/utils/supabase/session";
 import RevalidateButton from "./revalidateButton";
 import { Button } from "@/components/ui/button";
+import { Session } from "inspector/promises";
 
 export default async function AdminDashboard() {
   const session = await getServerSession();
