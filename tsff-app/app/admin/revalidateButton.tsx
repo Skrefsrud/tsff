@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 
 interface RevalidateButtonProps {
-  userId: string;
+  userId: string | any;
 }
 
 export default function RevalidateButton({ userId }: RevalidateButtonProps) {
