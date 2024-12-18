@@ -27,10 +27,19 @@ export default async function AdminLayout({
   breadcrumbs,
 }: AdminLayoutProps) {
   const user = await getServerSession(); // Fetch user data (server-side)
+  console.log("called from admin layout", user);
 
   return (
     <SidebarProvider>
-      <AdminSidebar user={user} />
+      {user && (
+        <AdminSidebar
+          user={{
+            name: user.profile.name || "Guest",
+            email: user.user.email || "No email",
+            avatar: user.profile.avatar_url || "",
+          }}
+        />
+      )}
       <SidebarInset>
         {/* Header */}
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">

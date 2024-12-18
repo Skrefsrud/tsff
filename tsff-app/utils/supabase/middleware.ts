@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { getServerSession } from "./session";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -21,35 +22,26 @@ export async function updateSession(request: NextRequest) {
       },
     }
   );
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  // Define protected routes
+
+  // Fetch the session
+  const session = await getServerSession();
+  if (!session) {
+    return supabaseResponse;
+  }
+
+  // Define protected and admin routes
   const protectedRoutes = ["/profile"]; // Add your protected routes here
   const adminRoutes = ["/admin"];
 
-  if (protectedRoutes.includes(request.nextUrl.pathname) && !user) {
+  // Redirect unauthenticated users for protected routes
+  if (protectedRoutes.includes(request.nextUrl.pathname) && !session.user) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-  // If user is authenticated, fetch their roles
-  let roles: string[] = [];
-  if (user) {
-    const { data: roleData, error: roleError } = await supabase
-      .from("user_with_roles")
-      .select("role_name")
-      .eq("user_id", user.id);
-
-    if (roleError) {
-      console.error("Error fetching user roles:", roleError.message);
-    } else {
-      roles = roleData.map((role) => role.role_name);
-    }
-  }
-
   // Role-based protection for admin routes
+  const roles = session.roles || [];
   if (adminRoutes.includes(request.nextUrl.pathname)) {
     if (!roles.includes("admin")) {
       const url = request.nextUrl.clone();
@@ -57,5 +49,6 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(url);
     }
   }
+
   return supabaseResponse;
 }

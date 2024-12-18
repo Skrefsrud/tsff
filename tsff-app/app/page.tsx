@@ -1,11 +1,18 @@
+import Header from "@/components/layout/header";
 import { getServerSession } from "@/utils/supabase/session";
 
 export default async function App() {
-  const user = await getServerSession();
+  const session = await getServerSession();
+  console.log(session);
 
-  if (!user) {
+  if (!session) {
     return <p>No user session found</p>;
   }
 
-  return <p>Welcome, {user.email}</p>;
+  return (
+    <>
+      <Header />
+      <p>Welcome, {session.user.email}</p>
+    </>
+  );
 }
