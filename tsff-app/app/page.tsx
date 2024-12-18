@@ -1,10 +1,18 @@
-// app/page.tsx
+import Header from "@/components/layout/header";
+import { getServerSession } from "@/utils/supabase/session";
 
-import Landing from "./home/landing";
+export default async function App() {
+  const session = await getServerSession();
+  console.log(session);
 
-export default function App() {
+  if (!session) {
+    return <p>No user session found</p>;
+  }
 
-  
-
-  return <Landing  />;
+  return (
+    <>
+      <Header />
+      <p>Welcome, {session.user.email}</p>
+    </>
+  );
 }
