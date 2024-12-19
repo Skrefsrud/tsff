@@ -10,6 +10,7 @@ export async function GET(
   const { id: userId } = await params;
 
   try {
+    console.log("user[id] called");
     const cookieStore = await cookies();
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,

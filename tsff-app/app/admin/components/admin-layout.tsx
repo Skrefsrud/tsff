@@ -27,7 +27,6 @@ export default async function AdminLayout({
   breadcrumbs,
 }: AdminLayoutProps) {
   const user = await getServerSession(); // Fetch user data (server-side)
-  console.log("called from admin layout", user);
 
   return (
     <SidebarProvider>

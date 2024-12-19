@@ -48,7 +48,6 @@ CREATE TABLE teams (
     name VARCHAR NOT NULL,
     logo_url VARCHAR,
     social_links JSON,
-    team_leader UUID REFERENCES auth.users (id) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
@@ -56,6 +55,7 @@ CREATE TABLE season_teams (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     season_division_id UUID REFERENCES season_divisions(id) ON DELETE CASCADE,
     team_id UUID REFERENCES teams(id) ON DELETE CASCADE,
+    team_leader UUID REFERENCES auth.users (id) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     UNIQUE (season_division_id, team_id)
 );
