@@ -3,51 +3,47 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getServerSession } from "./session";
 
 export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
+  let supabaseResponse = NextResponse.next({
+    request,
+  });
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll: () => request.cookies.getAll(),
-        setAll: (cookiesToSet) => {
-          for (const { name, value } of cookiesToSet) {
-            request.cookies.set(name, value);
-          }
-          supabaseResponse = NextResponse.next({ request });
-          for (const { name, value, options } of cookiesToSet) {
-            supabaseResponse.cookies.set(name, value, options);
-          }
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) =>
+            request.cookies.set(name, value)
+          );
+          supabaseResponse = NextResponse.next({
+            request,
+          });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          );
         },
       },
     }
   );
 
   // Fetch the session
-  const session = await getServerSession();
-  if (!session) {
-    return supabaseResponse;
-  }
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // Define protected and admin routes
   const protectedRoutes = ["/profile"]; // Add your protected routes here
   const adminRoutes = ["/admin"];
 
   // Redirect unauthenticated users for protected routes
-  if (protectedRoutes.includes(request.nextUrl.pathname) && !session.user) {
+  if (protectedRoutes.includes(request.nextUrl.pathname) && !user) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
-  }
-
-  // Role-based protection for admin routes
-  const roles = session.roles || [];
-  if (adminRoutes.includes(request.nextUrl.pathname)) {
-    if (!roles.includes("admin")) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/"; // Redirect unauthorized users to home
-      return NextResponse.redirect(url);
-    }
   }
 
   return supabaseResponse;

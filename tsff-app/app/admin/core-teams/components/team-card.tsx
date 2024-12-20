@@ -1,7 +1,10 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { SimpleIcon } from "simple-icons";
+import { Separator } from "@/components/ui/separator";
+import { Team } from "@/types/types";
+
 import { IconType } from "react-icons";
 import { createElement } from "react";
 import {
@@ -12,11 +15,9 @@ import {
   SiYoutube,
 } from "react-icons/si";
 
-type Team = {
-  name: string;
-  logo_url?: string;
-  social_links: { [platform: string]: string };
-};
+import { EditTeamForm } from "./edit-team-fom";
+
+import { useState } from "react";
 
 // Mapping platforms to their respective SimpleIcons or ReactIcons
 const socialIcons: Record<string, IconType> = {
@@ -27,7 +28,9 @@ const socialIcons: Record<string, IconType> = {
   YouTube: SiYoutube,
 };
 
-export function TeamCard({ name, logo_url, social_links }: Team) {
+export function TeamCard({ id, name, logo_url, social_links }: Team) {
+  const [editOpen, setEditOpen] = useState(false);
+
   return (
     <Card className="w-64 h-42 flex flex-col justify-between items-start border rounded-lg shadow-md overflow-hidden">
       <CardHeader className="flex flex-row items-center space-x-4 pb-2">
@@ -41,7 +44,9 @@ export function TeamCard({ name, logo_url, social_links }: Team) {
         <div className="flex-1">
           <CardTitle className="text-4xl">{name}</CardTitle>
         </div>
+        <Button onClick={() => setEditOpen(true)}>Edit</Button>
       </CardHeader>
+      <Separator />
       <CardContent className="w-full text-left flex-grow">
         <div className="flex flex-wrap gap-2 mt-4">
           {Object.entries(social_links).map(([platform, url]) => {
@@ -63,6 +68,12 @@ export function TeamCard({ name, logo_url, social_links }: Team) {
           })}
         </div>
       </CardContent>
+      {editOpen && (
+        <EditTeamForm
+          initialData={{ id, name, logo_url, social_links }}
+          onClose={() => setEditOpen(false)}
+        />
+      )}
     </Card>
   );
 }

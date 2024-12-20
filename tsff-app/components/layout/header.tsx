@@ -1,12 +1,15 @@
-"use client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "./theme-toggle";
-import { useAuth } from "@/context/AuthContext";
 import { User } from "lucide-react";
+import { Session } from "@/types/types";
 
-export default function Header() {
-  const { user, loading } = useAuth();
+interface HeaderProps {
+  session: Session | null;
+}
+
+export default function Header({ session }: HeaderProps) {
+  const user = session?.user; // Extract user from the session
 
   return (
     <header className="bg-background border-b">
@@ -51,9 +54,7 @@ export default function Header() {
             </nav>
           </div>
           <div className="hidden md:flex items-center space-x-2">
-            {loading ? (
-              <p>Loading...</p>
-            ) : user ? (
+            {user ? (
               <Link href={`/profile/${user.id}`}>
                 <Button variant="ghost" size="icon">
                   <User className="w-6 h-6" />

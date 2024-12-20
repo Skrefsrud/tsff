@@ -62,10 +62,53 @@ export async function fetchTeams() {
     console.error("Error fetching teams:", error);
     throw new Error("Failed to fetch teams");
   }
-
-  console.log(data);
-
   return data;
 }
 
 // Revalidate teams cache
+const teamUpdateSchema = z.object({
+  id: z.string().uuid("Invalid team ID"), // UUID validation
+  name: z.string().min(1, "Team name is required").optional(), // Optional name update
+  logo_url: z.string().url("Invalid URL").optional(), // Optional logo URL
+  social_links: z.record(z.string().url("Invalid URL")).optional(), // Optional social links
+});
+
+export async function updateTeam(formData: FormData) {
+  console.log("updating team");
+
+  const validatedFields = teamUpdateSchema.safeParse({
+    id: formData.get("id"),
+    name: formData.get("name"),
+    logo_url: formData.get("logo_url"),
+    social_links: JSON.parse((formData.get("social_links") as string) || "{}"), // Parse to an object
+  });
+
+  if (!validatedFields.success) {
+    return { error: validatedFields.error.flatten().fieldErrors };
+  }
+
+  const { id, name, logo_url, social_links } = validatedFields.data;
+
+  try {
+    const updateData = {
+      ...(name && { name }),
+      ...(logo_url && { logo_url }),
+      ...(social_links && { social_links }),
+    };
+
+    const { data, error } = await supabase
+      .from("teams")
+      .update(updateData)
+      .eq("id", id)
+      .select();
+
+    if (error) throw error;
+
+    revalidateTag(TEAM_CACHE_TAG);
+
+    return { success: true, data };
+  } catch (error) {
+    console.error("Error updating team:", error);
+    return { error: "Failed to update team" };
+  }
+}

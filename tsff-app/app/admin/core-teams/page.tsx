@@ -5,7 +5,6 @@ import { TeamCard } from "./components/team-card";
 
 export default async function CoreTeamsPage() {
   const teams = await fetchTeams();
-  console.log("teams", teams);
   return (
     <AdminLayout
       breadcrumbs={[
@@ -22,6 +21,7 @@ export default async function CoreTeamsPage() {
           {teams.map((team) => (
             <TeamCard
               key={team.id}
+              id={team.id}
               name={team.name}
               logo_url={team.logo_url}
               social_links={team.social_links}

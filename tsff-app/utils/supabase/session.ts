@@ -1,43 +1,38 @@
-import { cookies } from "next/headers";
-import { createServerClient } from "@supabase/ssr";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import { createClient } from "@/utils/supabase/server"; // Supabase server client
+import { User } from "@supabase/supabase-js";
 
+/**
+ * Fetches the user session on the server side.
+ * Returns the authenticated user and additional user details if available.
+ */
 export async function getServerSession() {
   try {
-    const cookieStore = await cookies();
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll: () => cookieStore.getAll(),
-        },
-      }
-    );
+    const supabase = await createClient();
 
-    // Fetch user
+    // Fetch the authenticated user
     const { data: userResponse, error: userError } =
       await supabase.auth.getUser();
-    if (userError || !userResponse) return null;
+    if (userError || !userResponse) {
+      console.warn("Failed to fetch authenticated user:", userError?.message);
+      return null; // No user session
+    }
 
-    const user = userResponse.user;
+    const user: User = userResponse.user;
 
-    // Call the user API route to get profile and roles
+    // Fetch additional user details (e.g., roles, profile) if needed
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    console.log(`called from session: ${baseUrl}/api/user/${user.id}`);
-
     const res = await fetch(`${baseUrl}/api/user/${user.id}`, {
-      cache: "force-cache", // Caching behavior
-      next: { tags: [`user-${user.id}`], revalidate: 604800 }, // User-specific tag for revalidation
+      cache: "no-store",
     });
 
     if (!res.ok) {
       console.error("Failed to fetch user details from API:", res.statusText);
-      return null;
+      return { user }; // Return just the authenticated user if API fails
     }
 
     const userDetails = await res.json();
 
+    // Combine user and additional details
     return {
       user: {
         id: user.id,
@@ -51,7 +46,7 @@ export async function getServerSession() {
       ...userDetails,
     };
   } catch (error) {
-    console.error("Error fetching user session:", error);
+    console.error("Error fetching server session:", error);
     return null;
   }
 }
