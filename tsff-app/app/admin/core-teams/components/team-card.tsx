@@ -15,6 +15,7 @@ import {
   SiYoutube,
 } from "react-icons/si";
 
+import { Pen } from "lucide-react";
 import { EditTeamForm } from "./edit-team-fom";
 
 import { useState } from "react";
@@ -32,7 +33,7 @@ export function TeamCard({ id, name, logo_url, social_links }: Team) {
   const [editOpen, setEditOpen] = useState(false);
 
   return (
-    <Card className="w-64 h-42 flex flex-col justify-between items-start border rounded-lg shadow-md overflow-hidden">
+    <Card className="w-72 h-42 flex flex-col justify-between items-start border rounded-lg shadow-md overflow-hidden">
       <CardHeader className="flex flex-row items-center space-x-4 pb-2">
         <Avatar className="h-16 w-16">
           {logo_url ? (
@@ -44,7 +45,7 @@ export function TeamCard({ id, name, logo_url, social_links }: Team) {
         <div className="flex-1">
           <CardTitle className="text-4xl">{name}</CardTitle>
         </div>
-        <Button onClick={() => setEditOpen(true)}>Edit</Button>
+        <Pen onClick={() => setEditOpen(true)}>Edit</Pen>
       </CardHeader>
       <Separator />
       <CardContent className="w-full text-left flex-grow">

@@ -59,7 +59,15 @@ export type Database = {
           published_at?: string | null
           title?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "announcements_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "user_with_roles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       field_availability: {
         Row: {
@@ -201,6 +209,20 @@ export type Database = {
             referencedRelation: "matches"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "match_reschedule_requests_requested_by_fkey"
+            columns: ["requested_by"]
+            isOneToOne: false
+            referencedRelation: "user_with_roles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "match_reschedule_requests_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "user_with_roles"
+            referencedColumns: ["user_id"]
+          },
         ]
       }
       match_schedule: {
@@ -245,6 +267,13 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "matches"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "match_schedule_scheduled_by_fkey"
+            columns: ["scheduled_by"]
+            isOneToOne: false
+            referencedRelation: "user_with_roles"
+            referencedColumns: ["user_id"]
           },
         ]
       }
@@ -372,6 +401,13 @@ export type Database = {
             referencedRelation: "messages"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "message_recipients_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "user_with_roles"
+            referencedColumns: ["user_id"]
+          },
         ]
       }
       messages: {
@@ -396,7 +432,15 @@ export type Database = {
           sender_id?: string
           subject?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "user_with_roles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       player_requests: {
         Row: {
@@ -428,11 +472,25 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "player_requests_approved_by_fkey"
+            columns: ["approved_by"]
+            isOneToOne: false
+            referencedRelation: "user_with_roles"
+            referencedColumns: ["user_id"]
+          },
+          {
             foreignKeyName: "player_requests_season_team_id_fkey"
             columns: ["season_team_id"]
             isOneToOne: false
             referencedRelation: "season_teams"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "player_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_with_roles"
+            referencedColumns: ["user_id"]
           },
         ]
       }
@@ -462,6 +520,42 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "season_teams"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "players_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_with_roles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          id: string
+          name: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          id: string
+          name?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "user_with_roles"
+            referencedColumns: ["user_id"]
           },
         ]
       }
@@ -556,7 +650,15 @@ export type Database = {
           id?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "referees_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_with_roles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       roles: {
         Row: {
@@ -652,18 +754,21 @@ export type Database = {
           id: string
           season_division_id: string | null
           team_id: string | null
+          team_leader: string | null
         }
         Insert: {
           created_at?: string
           id?: string
           season_division_id?: string | null
           team_id?: string | null
+          team_leader?: string | null
         }
         Update: {
           created_at?: string
           id?: string
           season_division_id?: string | null
           team_id?: string | null
+          team_leader?: string | null
         }
         Relationships: [
           {
@@ -679,6 +784,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "teams"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "season_teams_team_leader_fkey"
+            columns: ["team_leader"]
+            isOneToOne: false
+            referencedRelation: "user_with_roles"
+            referencedColumns: ["user_id"]
           },
         ]
       }
@@ -754,7 +866,6 @@ export type Database = {
           logo_url: string | null
           name: string
           social_links: Json | null
-          team_leader: string | null
         }
         Insert: {
           created_at?: string
@@ -762,7 +873,6 @@ export type Database = {
           logo_url?: string | null
           name: string
           social_links?: Json | null
-          team_leader?: string | null
         }
         Update: {
           created_at?: string
@@ -770,7 +880,6 @@ export type Database = {
           logo_url?: string | null
           name?: string
           social_links?: Json | null
-          team_leader?: string | null
         }
         Relationships: []
       }
@@ -801,11 +910,24 @@ export type Database = {
             referencedRelation: "roles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "user_roles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_with_roles"
+            referencedColumns: ["user_id"]
+          },
         ]
       }
     }
     Views: {
-      [_ in never]: never
+      user_with_roles: {
+        Row: {
+          role_name: string | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never

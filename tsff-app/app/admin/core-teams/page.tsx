@@ -2,6 +2,7 @@ import AdminLayout from "../components/admin-layout";
 import { CreateTeamForm } from "./components/create-team-form";
 import { fetchTeams } from "./actions";
 import { TeamCard } from "./components/team-card";
+import { InfoPopover } from "@/components/info-popover";
 
 export default async function CoreTeamsPage() {
   const teams = await fetchTeams();
@@ -14,7 +15,10 @@ export default async function CoreTeamsPage() {
     >
       <main>
         <div className="flex justify-between items-center gap-4">
-          <h1 className="text-2xl font-bold">Core Teams Management</h1>
+          <InfoPopover
+            headerText="Core Teams"
+            infoText="Create and edit the core of the teams. These are what each seasons instance of teams are tied to. Deleting these with tied data to it will potentially cause many problems."
+          />
           <CreateTeamForm />
         </div>
         <div className="flex flex-wrap gap-4 mt-4">

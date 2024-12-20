@@ -48,7 +48,7 @@ const data = {
         },
         {
           title: "Seasonal Teams",
-          url: "#",
+          url: "/admin/seasonal-teams",
         },
         {
           title: "Settings",
@@ -140,7 +140,7 @@ export function AdminSidebar({ user, ...props }: AdminSidebarProps) {
           },
           {
             title: "Seasonal Teams",
-            url: "#",
+            url: "/admin/seasonal-teams",
           },
           {
             title: "Settings",
