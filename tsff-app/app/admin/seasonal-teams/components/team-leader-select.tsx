@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import useSWR from "swr";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -27,33 +28,29 @@ interface TeamLeaderSelectProps {
   onChange: (value: string) => void;
 }
 
+const fetcher = (url: string) =>
+  fetch(url).then((res) => {
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
+    }
+    return res.json();
+  });
+
 export default function TeamLeaderSelect({
   value,
   onChange,
 }: TeamLeaderSelectProps) {
   const [open, setOpen] = useState(false);
-  const [users, setUsers] = useState<User[]>([]);
+  const { data, error, isLoading } = useSWR("/api/users", fetcher);
 
-  useEffect(() => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch(`${baseUrl}/api/users`, {
-          cache: "no-store",
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch users");
-        }
+  
+  console.log("error: ",error)
 
-        const data = await response.json();
-        setUsers(data.users);
-      } catch (err) {
-        console.error(err);
-      }
-    };
+  if (error) return <div>Failed to load users.</div>;
+  if (isLoading) return <div>Loading...</div>;
 
-    fetchUsers();
-  }, []);
+  
+  console.log("the data: " ,data)
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -65,7 +62,7 @@ export default function TeamLeaderSelect({
           className="w-full justify-between"
         >
           {value
-            ? users.find((user) => user.id === value)?.name
+            ? data.users.find((user: User) => user.id === value)?.name
             : "Select team leader..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -75,7 +72,7 @@ export default function TeamLeaderSelect({
           <CommandInput placeholder="Search team leader..." />
           <CommandEmpty>No team leader found.</CommandEmpty>
           <CommandGroup>
-            {users.map((user) => (
+            {data.users.map((user: User) => (
               <CommandItem
                 key={user.id}
                 onSelect={() => {

@@ -1,29 +1,22 @@
-// pages/api/users.ts
-import { createClient } from "@/utils/supabase/client";
-import { NextApiRequest, NextApiResponse } from "next";
+// app/api/users/route.ts
+import { NextResponse } from 'next/server';
+import { createClient } from '@/utils/supabase/client';
 
 const supabase = createClient();
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== "GET") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
+export async function GET() {
   try {
     // Fetch all users from the `profiles` table
-    const { data, error } = await supabase.from("profiles").select("id, name");
+    const { data, error } = await supabase.from('profiles').select('id, name');
 
     if (error) {
-      console.error("Error fetching users:", error);
-      return res.status(500).json({ error: "Failed to fetch users" });
+      console.error('Error fetching users:', error);
+      return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
     }
 
-    return res.status(200).json({ users: data });
+    return NextResponse.json({ users: data }, { status: 200 });
   } catch (err) {
-    console.error("Unexpected error:", err);
-    return res.status(500).json({ error: "An unexpected error occurred" });
+    console.error('Unexpected error:', err);
+    return NextResponse.json({ error: 'An unexpected error occurred' }, { status: 500 });
   }
 }
