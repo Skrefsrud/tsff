@@ -68,3 +68,16 @@ export async function createSeason(formData: FormData) {
     return { error: "Failed to create season" };
   }
 }
+
+
+
+export async function fetchAllSeasons() {
+  try {
+    const { data, error } = await supabase.from("seasons").select("*");
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error("Error fetching seasons:", error);
+    throw error;
+  }
+}
