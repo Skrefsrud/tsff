@@ -44,7 +44,7 @@ export function AdminSidebar({ user, ...props }: AdminSidebarProps) {
         title: "Teams",
         url: "#",
         icon: Handshake,
-        isActive: true,
+        isActive: false,
         items: [
           {
             title: "Core Teams",
@@ -67,8 +67,8 @@ export function AdminSidebar({ user, ...props }: AdminSidebarProps) {
             url: "/admin/seasons",
           },
           {
-            title: "Season_Divisions",
-            url: "/admin/season_divisions",
+            title: "Groups",
+            url: "/admin/groups",
           },
         ],
       },

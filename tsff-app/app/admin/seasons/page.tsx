@@ -18,7 +18,7 @@ export default async function SeasonalTeamsPage() {
     <AdminLayout
       breadcrumbs={[
         { label: "Admin", href: "/admin" },
-        { label: "Core-Teams" },
+        { label: "Seasons" },
       ]}
     >
       <main>

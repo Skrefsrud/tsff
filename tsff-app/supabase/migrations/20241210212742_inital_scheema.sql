@@ -35,11 +35,11 @@ CREATE TABLE seasons (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-CREATE TABLE season_divisions (
+CREATE TABLE season_groups (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     season_id UUID REFERENCES seasons(id) ON DELETE CASCADE,
-    division_name VARCHAR NOT NULL,
-    phase VARCHAR(50) CHECK (phase IN ('autumn', 'playoffs')) NOT NULL,
+    group_name VARCHAR NOT NULL,
+    completed BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
@@ -53,11 +53,11 @@ CREATE TABLE teams (
 
 CREATE TABLE season_teams (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    season_division_id UUID REFERENCES season_divisions(id) ON DELETE CASCADE,
+    season_group_id UUID REFERENCES season_groups(id) ON DELETE CASCADE,
     team_id UUID REFERENCES teams(id) ON DELETE CASCADE,
     team_leader UUID REFERENCES auth.users (id) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    UNIQUE (season_division_id, team_id)
+    UNIQUE (season_group_id, team_id)
 );
 
 CREATE TABLE players (

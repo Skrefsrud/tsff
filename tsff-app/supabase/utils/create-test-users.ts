@@ -62,7 +62,7 @@ async function deleteExistingUsers(emails: string[]) {
 
 async function createTestUsers() {
   const ADMIN_COUNT = 1;
-  const PLAYER_COUNT = 5;
+  const PLAYER_COUNT = 60;
   const REFEREE_COUNT = 3;
 
   // Admin user

@@ -22,18 +22,18 @@ import { useState } from "react";
 
 // Mapping platforms to their respective SimpleIcons or ReactIcons
 const socialIcons: Record<string, IconType> = {
-  Twitter: SiX,
-  Facebook: SiFacebook,
-  LinkedIn: SiLinkedin,
-  Instagram: SiInstagram,
-  YouTube: SiYoutube,
+  twitter: SiX,
+  facebook: SiFacebook,
+  linkedin: SiLinkedin,
+  instagram: SiInstagram,
+  youtube: SiYoutube,
 };
 
 export function TeamCard({ id, name, logo_url, social_links }: Team) {
   const [editOpen, setEditOpen] = useState(false);
 
   return (
-    <Card className="w-72 h-42 flex flex-col justify-between items-start border rounded-lg shadow-md overflow-hidden">
+    <Card className="relative w-72 h-42 flex flex-col justify-between items-start border rounded-lg shadow-md overflow-hidden">
       <CardHeader className="flex flex-row items-center space-x-4 pb-2">
         <Avatar className="h-16 w-16">
           {logo_url ? (
@@ -43,9 +43,9 @@ export function TeamCard({ id, name, logo_url, social_links }: Team) {
           )}
         </Avatar>
         <div className="flex-1">
-          <CardTitle className="text-4xl">{name}</CardTitle>
+          <CardTitle className="text-2xl">{name}</CardTitle>
         </div>
-        <Pen onClick={() => setEditOpen(true)}>Edit</Pen>
+        <Pen className="h-6 w-6 absolute top-2 right-2" onClick={() => setEditOpen(true)}>Edit</Pen>
       </CardHeader>
       <Separator />
       <CardContent className="w-full text-left flex-grow">
