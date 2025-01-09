@@ -29,10 +29,6 @@ export async function GET(
       .eq("user_id", userId)
       .then((res) => ({
         ...res,
-        next: {
-          tags: [`user-${userId}`], // Add user-specific tag for revalidation
-          revalidate: 604800, // Revalidate every week (7 days)
-        },
       }));
 
     if (roleError) {
@@ -51,10 +47,6 @@ export async function GET(
       .single()
       .then((res) => ({
         ...res,
-        next: {
-          tags: [`user-${userId}`], // Add user-specific tag for revalidation
-          revalidate: 604800, // Revalidate every week (7 days)
-        },
       }));
 
     if (profileError) {

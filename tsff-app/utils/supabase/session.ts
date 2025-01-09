@@ -22,7 +22,10 @@ export async function getServerSession() {
     // Fetch additional user details (e.g., roles, profile) if needed
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const res = await fetch(`${baseUrl}/api/user/${user.id}`, {
-      cache: "no-store",
+      next: {
+        tags: [`user-${user.id}`], // Add user-specific tag for revalidation
+        revalidate: 604800, // Revalidate every week (7 days)
+      },
     });
 
     if (!res.ok) {
@@ -31,6 +34,7 @@ export async function getServerSession() {
     }
 
     const userDetails = await res.json();
+    
 
     // Combine user and additional details
     return {

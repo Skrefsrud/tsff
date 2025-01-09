@@ -111,6 +111,9 @@ async function createTestUsers() {
         email: user.email,
         password: user.password,
         email_confirm: true,
+        user_metadata: {
+          role: user.role,
+        },
       });
 
     if (authError) {
