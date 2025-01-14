@@ -38,7 +38,6 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log(user)
 
   // Define protected and admin routes
   const protectedRoutes = ["/profile"]; // Add your protected routes here

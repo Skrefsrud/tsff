@@ -10,8 +10,12 @@ export async function login(formData: FormData) {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
   });
-  if (error) redirect('/error');
-  revalidatePath('/', 'layout')
+  if (error) {
+    console.log("login error: ", error);
+    // Handle the error appropriately, e.g., return an error message
+    return;
+  }
+  // Perform the redirect after successful login
   redirect('/');
 }
 
@@ -22,6 +26,5 @@ export async function signup(formData: FormData) {
     password: formData.get('password') as string,
   });
   if (error) redirect('/error');
-  revalidatePath('/', 'layout')
   redirect('/');
 }

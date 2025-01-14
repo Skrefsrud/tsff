@@ -3,10 +3,12 @@ import { InfoPopover } from "@/components/info-popover";
 import { Separator } from "@/components/ui/separator";
 import { fetchCurrentSeason } from "../seasons/actions";
 import { CreateSeasonGroupForm } from "./create-season-group";
+import { GroupsTable } from "./groups-table";
 
 export default async function SeasonalTeamsPage() {
 
   const season = await fetchCurrentSeason();
+  console.log(season)
 
   return (
     <AdminLayout
@@ -26,6 +28,8 @@ export default async function SeasonalTeamsPage() {
         <h2 className="mb-4">Current season: {season.year_label}</h2>
         <Separator />
 
+
+        <GroupsTable seasonId={season.id} />
         
 
 
